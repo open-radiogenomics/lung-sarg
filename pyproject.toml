@@ -1,7 +1,7 @@
 [project]
-name = "datadex"
+name = "lung-sarg"
 version = "1.0.0"
-authors = [{ name = "David Gasquez" }]
+authors = [{ name = "Matt McCormick" }]
 dependencies = [
     "altair",
     "dagster-dbt==0.23.16",
@@ -26,10 +26,10 @@ readme = "README.md"
 license = { text = "MIT" }
 
 [project.urls]
-Homepage = "https://davidgasquez.github.io/datadex/"
-Changelog = "https://github.com/davidgasquez/datadex/commits/main/"
-Issues = "https://github.com/davidgasquez/datadex/issues"
-CI = "https://github.com/davidgasquez/datadex/actions"
+Homepage = "https://radiogenomics.github.io/lung-sarg/"
+Changelog = "https://github.com/radiogenomics/lung-sarg/commits/main/"
+Issues = "https://github.com/radiogenomics/lung-sarg/issues"
+CI = "https://github.com/radiogenomics/lung-sarg/actions"
 
 [project.optional-dependencies]
 dev = ["dagster-webserver==1.7.16", "ruff"]
@@ -39,13 +39,13 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["datadex"]
+packages = ["lung_sarg"]
 
 [tool.setuptools.package-data]
-"datadex" = ["../dbt/**"]
+"lung_sarg" = ["../dbt/**"]
 
 [tool.dagster]
-module_name = "datadex"
+module_name = "lung_sarg"
 
 [tool.ruff.lint.isort]
 case-sensitive = true
