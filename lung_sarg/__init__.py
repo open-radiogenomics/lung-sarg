@@ -4,12 +4,13 @@ from dagster import EnvVar, Definitions, load_assets_from_modules
 from dagster_dbt import DbtCliResource, load_assets_from_dbt_project
 from dagster_duckdb_polars import DuckDBPolarsIOManager
 
-from .assets import spain, others, indicators, huggingface
+from .assets import spain, others, indicators, huggingface, idc
 from .resources import (
     AEMETAPI,
     IUCNRedListAPI,
     MITECOArcGisAPI,
     DatasetPublisher,
+    IDCNSCLCRadiogenomicSampler
 )
 
 DBT_PROJECT_DIR = os.path.dirname(os.path.abspath(__file__)) + "/../dbt/"
@@ -18,11 +19,12 @@ DATABASE_PATH = os.getenv("DATABASE_PATH", "data/database.duckdb")
 dbt = DbtCliResource(project_dir=DBT_PROJECT_DIR, profiles_dir=DBT_PROJECT_DIR)
 
 dbt_assets = load_assets_from_dbt_project(DBT_PROJECT_DIR, DBT_PROJECT_DIR)
-all_assets = load_assets_from_modules([indicators, huggingface, others, spain])
+all_assets = load_assets_from_modules([idc, indicators, huggingface, others, spain])
 
 resources = {
     "dbt": dbt,
     "io_manager": DuckDBPolarsIOManager(database=DATABASE_PATH, schema="main"),
+    "idc_nsclc_radiogenomic_sampler": IDCNSCLCRadiogenomicSampler(n_samples=2),
     "iucn_redlist_api": IUCNRedListAPI(token=EnvVar("IUCN_REDLIST_TOKEN")),
     "aemet_api": AEMETAPI(token=EnvVar("AEMET_API_TOKEN")),
     "miteco_api": MITECOArcGisAPI(),

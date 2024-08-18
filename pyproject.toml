@@ -65,7 +65,10 @@ dev = { features = ["dev"], solve-group = "default" }
 
 [tool.pixi.tasks]
 run = "dagster asset materialize --select '*' -m lung_sarg"
-clean = "rm -rf data/*.parquet data/*.duckdb dbt/target dbt/dbt_packages dbt/logs"
+clean = { cmd = "rm -rf data/*.parquet data/*.duckdb dbt/target dbt/dbt_packages dbt/logs", description = "Clean the project artifacts" }
 
 [tool.pixi.feature.dev.tasks]
-dev = "dagster dev"
+dev = { cmd = "dagster dev", description = "Run the development environment" }
+
+[tool.pixi.dependencies]
+s5cmd = ">=2.2.2,<3"

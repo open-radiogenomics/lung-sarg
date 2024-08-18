@@ -35,7 +35,7 @@ Lung-SARG is a fully open-source and local-first platform that improves how comm
 - **Distributed**: Permissionless ecosystem and collaboration. Open source code and make it ready to be improved.
 - **Community**: that incentives contributors.
 - **Immutability**: Embrace idempotency. Rely on content-addressable storage and append-only logs.
-- **Stateless and serverless**: as much as possible. E.g. use GitHub Pages, host datasets on S3. No servers to maintain, no databases to manage, no infrastructure to worry about. Keep infrastructure management lean.
+- **Stateless and serverless**: as much as possible. E.g. use GitHub Pages, host datasets on S3, interface with HTML, JavaScript, and WASM. No servers to maintain, no databases to manage, no infrastructure to worry about. Keep infrastructure management lean.
 - **Offline-first**: Rely on static files and offline-first tools.
 - **Above all, have fun and enjoy the process** 🎉
 
@@ -50,6 +50,12 @@ pixi run dev
 ```
 
 Now, you should be able to [access the Dagster UI locally](http://127.0.0.1:3000).
+
+To see all tasks available:
+
+```bash
+pixi task list
+```
 
 ## 🎯 Motivation
 

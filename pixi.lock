@@ -25,6 +25,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/openssl-3.3.1-h4bc722e_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/python-3.12.5-h2ad013b_0_cpython.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/readline-8.2-h8228510_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/s5cmd-2.2.2-ha8f183a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/tk-8.6.13-noxft_h4845f30_101.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2024a-h0c530f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/xz-5.2.6-h166bdaf_0.tar.bz2
@@ -197,6 +198,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/openssl-3.3.1-h4bc722e_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/python-3.12.5-h2ad013b_0_cpython.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/readline-8.2-h8228510_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/s5cmd-2.2.2-ha8f183a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/tk-8.6.13-noxft_h4845f30_101.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2024a-h0c530f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/xz-5.2.6-h166bdaf_0.tar.bz2
@@ -2170,7 +2172,7 @@ packages:
   name: lung-sarg
   version: 1.0.0
   path: .
-  sha256: a4ff886e1a1d5549c4c7e7eee715622d0ed3a84d36ec472b8bd07e0107bea4ba
+  sha256: cfd01fc9dd279e9180e0cccc86cd13046338fc3dc2c9b4a561d3846db69d95a5
   requires_dist:
   - altair
   - dagster-dbt==0.23.16
@@ -2827,6 +2829,19 @@ packages:
   url: https://files.pythonhosted.org/packages/e0/94/92bc24e7e58d2f90fa2a370f763d25d9e06ccccfab839b88e389d79fb4e3/ruff-0.6.1-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
   sha256: d812615525a34ecfc07fd93f906ef5b93656be01dfae9a819e31caa6cfe758a1
   requires_python: '>=3.7'
+- kind: conda
+  name: s5cmd
+  version: 2.2.2
+  build: ha8f183a_0
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/s5cmd-2.2.2-ha8f183a_0.conda
+  sha256: 98a90ff6c6e36d212c5b5f09bf2f4e183ba0a438753776920c80e7216371a588
+  md5: d775cc6f77d0ac93427fca1bc86b76a7
+  license: Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MIT AND MPL-2.0
+  license_family: MIT
+  purls: []
+  size: 8011315
+  timestamp: 1696274036883
 - kind: pypi
   name: setuptools
   version: 72.2.0

@@ -3,16 +3,64 @@ import json
 import datetime
 import tempfile
 from typing import Optional
+from pathlib import Path
+import subprocess
 
 import yaml
 import httpx
 import polars as pl
+import pandas as pd
 from dagster import InitResourceContext, ConfigurableResource, get_dagster_logger
 from pydantic import PrivateAttr
 from tenacity import retry, wait_exponential, stop_after_attempt
 from huggingface_hub import HfApi
+from pyarrow.csv import read_csv
 
 log = get_dagster_logger()
+
+class IDCNSCLCRadiogenomicSampler(ConfigurableResource):
+    n_samples: int = 1
+
+    def get_samples(self) -> pl.DataFrame:
+        data_dir = Path(__file__).parent / ".." / "data"
+        manifest_path = data_dir / "idc-nsclc-radiogenomics-sampler"
+        patients_path = manifest_path / 'NSCLCR01Radiogenomic_DATA_LABELS_2018-05-22_1500-shifted.csv'
+        patients_table = pl.from_arrow(read_csv(patients_path))
+
+        samples = patients_table.sample(self.n_samples)
+
+        images_manifest_path = manifest_path / 'idc_manifest_full_table.csv'
+        images_table = read_csv(images_manifest_path).to_pandas()
+
+        for row in samples.iter_rows(named=True):
+            log.info(f"Fetching images for patient {row['Patient ID']}")
+            output_path = data_dir / 'pre-staging' / 'nsclc-radiogenomics-samples' / row['Patient ID']
+
+            os.makedirs(output_path, exist_ok=True)
+            with open(output_path / 'patient.json', 'w') as fp:
+                fp.write(pd.DataFrame({0: row}).to_json())
+
+            images_path = output_path / 'dicom'
+            images_path.mkdir(exist_ok=True)
+
+            series = images_table.loc[images_table['PatientID'] == 'AMC-001', ['PatientID', 'StudyInstanceUID', 'SeriesInstanceUID', 'crdc_study_uuid', 'crdc_series_uuid']]
+            with open(output_path / 'image-series.json', 'w') as fp:
+                fp.write(pd.DataFrame(series).to_json())
+
+            for _, ds in series.iterrows():
+                dicom_path = images_path / ds.PatientID / ds.StudyInstanceUID / ds.SeriesInstanceUID
+                os.makedirs(dicom_path, exist_ok=True)
+
+                command = ["s5cmd",
+                    "--no-sign-request",
+                    "--endpoint-url",
+                    "https://s3.amazonaws.com",
+                    "cp",
+                    f"s3://idc-open-data/{ds.crdc_series_uuid}/*",
+                    "."]
+                subprocess.check_call(command, cwd=dicom_path, stdout=subprocess.DEVNULL)
+
+        return samples
 
 
 class IUCNRedListAPI(ConfigurableResource):
