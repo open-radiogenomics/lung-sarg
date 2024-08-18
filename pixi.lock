@@ -2170,7 +2170,7 @@ packages:
   name: lung-sarg
   version: 1.0.0
   path: .
-  sha256: 7e869460ef81be3e5d00450352eb0e4ab3c5f8f8ade9d0f2492cf67c5aba717a
+  sha256: a4ff886e1a1d5549c4c7e7eee715622d0ed3a84d36ec472b8bd07e0107bea4ba
   requires_dist:
   - altair
   - dagster-dbt==0.23.16
