@@ -51,3 +51,16 @@ module_name = "lung_sarg"
 case-sensitive = true
 combine-as-imports = true
 length-sort = true
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tool.pixi.pypi-dependencies]
+lung-sarg = { path = ".", editable = true }
+
+[tool.pixi.environments]
+default = { solve-group = "default" }
+dev = { features = ["dev"], solve-group = "default" }
+
+[tool.pixi.tasks]

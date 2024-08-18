@@ -145,3 +145,6 @@ data/**
 
 # JetBrains IDEs settings
 .idea/*
+# pixi environments
+.pixi
+*.egg-info
