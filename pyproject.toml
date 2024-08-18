@@ -64,3 +64,7 @@ default = { solve-group = "default" }
 dev = { features = ["dev"], solve-group = "default" }
 
 [tool.pixi.tasks]
+run = "dagster asset materialize --select '*' -m lung_sarg"
+
+[tool.pixi.feature.dev.tasks]
+dev = "dagster dev"

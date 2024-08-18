@@ -2146,14 +2146,14 @@ packages:
   url: https://files.pythonhosted.org/packages/2f/d9/16ac346f7c0102835814cc9e5b684aaadea101560bb932a2403bd26b2320/Logbook-1.5.3.tar.gz
   sha256: 66f454ada0f56eae43066f604a222b09893f98c1adc18df169710761b8f32fe8
   requires_dist:
+  - pyzmq ; extra == 'all'
   - pytest-cov>=2.6 ; extra == 'all'
   - cython ; extra == 'all'
-  - redis ; extra == 'all'
   - execnet>=1.0.9 ; extra == 'all'
-  - pyzmq ; extra == 'all'
-  - pytest>4.0 ; extra == 'all'
-  - brotli ; extra == 'all'
+  - redis ; extra == 'all'
   - sqlalchemy ; extra == 'all'
+  - brotli ; extra == 'all'
+  - pytest>4.0 ; extra == 'all'
   - jinja2 ; extra == 'all'
   - brotli ; extra == 'compression'
   - pytest>4.0 ; extra == 'dev'
@@ -2170,7 +2170,7 @@ packages:
   name: lung-sarg
   version: 1.0.0
   path: .
-  sha256: 4b24a2a8810794495b79dc6380d3c8172337551247c6e360601c3dfe39510b76
+  sha256: 7e869460ef81be3e5d00450352eb0e4ab3c5f8f8ade9d0f2492cf67c5aba717a
   requires_dist:
   - altair
   - dagster-dbt==0.23.16
