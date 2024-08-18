@@ -83,5 +83,5 @@ This project started after [thinking how an Open Data Protocol could look like](
 
 ## 👏 Acknowledgements
 
-- Datadex is possible thanks to amazing open source projects like [DuckDB](https://www.duckdb.org/), [dbt](https://getdbt.com), [Dagster](https://dagster.io/), [Quarto](https://quarto.org/), and many others...
+- Datadex is possible thanks to amazing open source projects like [DuckDB](https://www.duckdb.org/), [dbt](https://getdbt.com), [Dagster](https://dagster.io/), and many others...
 - Datadex name was inspired by [Juan Benet's `data` projects](https://juan.benet.ai/blog/2014-03-11-discussion-scienceexchange/).

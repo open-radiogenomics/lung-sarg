@@ -137,9 +137,6 @@ dbt/.user.yml
 data/**
 !data/.gitkeep
 
-# Quarto
-/.quarto/
-
 # Environment
 .env
 

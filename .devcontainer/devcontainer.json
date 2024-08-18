@@ -7,7 +7,6 @@
     "customizations": {
         "vscode": {
             "settings": {
-                "quarto.render.previewType": "external",
                 "files.associations": {
                     "*.sql": "jinja-sql"
                 },
@@ -37,7 +36,6 @@
                 "ms-python.vscode-pylance",
                 "ms-toolsai.datawrangler",
                 "ms-toolsai.jupyter",
-                "quarto.quarto",
                 "redhat.vscode-yaml",
                 "tamasfe.even-better-toml",
                 "visualstudioexptteam.vscodeintellicode"
