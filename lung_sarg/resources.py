@@ -18,12 +18,19 @@ from pyarrow.csv import read_csv
 
 log = get_dagster_logger()
 
+DBT_PROJECT_DIR = str(Path(__file__).parent.resolve() / ".." / "dbt")
+DATA_DIR = Path(__file__).parent.resolve() / ".." / "data"
+PRE_STAGED_DIR = DATA_DIR / "pre-staged"
+STAGED_DIR = DATA_DIR / "staged"
+DATABASE_PATH = os.getenv("DATABASE_PATH", str(DATA_DIR / "database.duckdb"))
+
+NSCLC_RADIOMICS_COLLECTION_NAME = "nsclc-radiomics-samples"
+
 class IDCNSCLCRadiogenomicSampler(ConfigurableResource):
     n_samples: int = 1
 
     def get_samples(self) -> pl.DataFrame:
-        data_dir = Path(__file__).parent / ".." / "data"
-        manifest_path = data_dir / "idc-nsclc-radiogenomics-sampler"
+        manifest_path = DATA_DIR / "idc-nsclc-radiogenomics-sampler"
         patients_path = manifest_path / 'NSCLCR01Radiogenomic_DATA_LABELS_2018-05-22_1500-shifted.csv'
         patients_table = pl.from_arrow(read_csv(patients_path))
 
@@ -34,7 +41,11 @@ class IDCNSCLCRadiogenomicSampler(ConfigurableResource):
 
         for row in samples.iter_rows(named=True):
             log.info(f"Fetching images for patient {row['Patient ID']}")
-            output_path = data_dir / 'pre-staging' / 'nsclc-radiogenomics-samples' / row['Patient ID']
+            output_path = PRE_STAGED_DIR / NSCLC_RADIOMICS_COLLECTION_NAME / row['Patient ID']
+
+            if output_path.exists():
+                log.info(f"Patient {row['Patient ID']} already exists")
+                continue
 
             os.makedirs(output_path, exist_ok=True)
             with open(output_path / 'patient.json', 'w') as fp:

@@ -3,7 +3,6 @@ name = "lung-sarg"
 version = "1.0.0"
 authors = [{ name = "Matt McCormick" }]
 dependencies = [
-    "altair",
     "dagster-dbt==0.23.16",
     "dagster-duckdb-polars==0.23.16",
     "dagster-duckdb",
@@ -14,11 +13,11 @@ dependencies = [
     "duckdb==1.0.0",
     "huggingface_hub",
     "httpx[http2]",
-    "ipykernel",
-    "ipywidgets",
     "pyarrow",
     "python-slugify",
     "tenacity",
+    "itk>=5.4.0,<6",
+    "ngff-zarr[itk,dask-image]>=0.8.5,<0.9",
 ]
 
 requires-python = ">=3.11, <=3.13"
