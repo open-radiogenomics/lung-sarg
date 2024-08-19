@@ -48,24 +48,17 @@ class CollectionTables(ConfigurableResource):
                     table_parquet = collection_path / f"{table}.parquet"
                     table_name = f"{collection_name}_{table}"
                     if table_parquet.exists():
-                        conn.execute(f"CREATE TABLE {table_name} AS SELECT * FROM parquet_scan('{table_parquet}')")
+                        conn.execute(f"CREATE TABLE IF NOT EXISTS {table_name} AS SELECT * FROM parquet_scan('{table_parquet}')")
                     else:
                         if table == "patients":
-                            conn.execute(f"CREATE TABLE {table_name} (patient_id VARCHAR, patient_affiliation VARCHAR, age_at_histological_diagnosis BIGINT, weight_lbs VARCHAR, gender VARCHAR, ethnicity VARCHAR, smoking_status VARCHAR, pack_years VARCHAR, quit_smoking_year BIGINT, percentgg VARCHAR, tumor_location_choice_rul VARCHAR, tumor_location_choice_rml VARCHAR, tumor_location_choice_rll VARCHAR, tumor_location_choice_lul VARCHAR, tumor_location_choice_lll VARCHAR, tumor_location_choice_l_lingula VARCHAR, tumor_location_choice_unknown VARCHAR, histology VARCHAR, pathological_t_stage VARCHAR, pathological_n_stage VARCHAR, pathological_m_stage VARCHAR, histopathological_grade VARCHAR, lymphovascular_invasion VARCHAR, pleural_invasion_elastic_visceral_or_parietal VARCHAR, egfr_mutation_status VARCHAR, kras_mutation_status VARCHAR, alk_translocation_status VARCHAR, adjuvant_treatment VARCHAR, chemotherapy VARCHAR, radiation VARCHAR, recurrence VARCHAR, recurrence_location VARCHAR, date_of_recurrence DATE, date_of_last_known_alive DATE, survival_status VARCHAR, date_of_death DATE, time_to_death_days BIGINT, ct_date DATE, days_between_ct_and_surgery BIGINT, pet_date DATE);")
+                            conn.execute(f"CREATE TABLE IF NOT EXISTS {table_name} (patient_id VARCHAR, patient_affiliation VARCHAR, age_at_histological_diagnosis BIGINT, weight_lbs VARCHAR, gender VARCHAR, ethnicity VARCHAR, smoking_status VARCHAR, pack_years VARCHAR, quit_smoking_year BIGINT, percentgg VARCHAR, tumor_location_choice_rul VARCHAR, tumor_location_choice_rml VARCHAR, tumor_location_choice_rll VARCHAR, tumor_location_choice_lul VARCHAR, tumor_location_choice_lll VARCHAR, tumor_location_choice_l_lingula VARCHAR, tumor_location_choice_unknown VARCHAR, histology VARCHAR, pathological_t_stage VARCHAR, pathological_n_stage VARCHAR, pathological_m_stage VARCHAR, histopathological_grade VARCHAR, lymphovascular_invasion VARCHAR, pleural_invasion_elastic_visceral_or_parietal VARCHAR, egfr_mutation_status VARCHAR, kras_mutation_status VARCHAR, alk_translocation_status VARCHAR, adjuvant_treatment VARCHAR, chemotherapy VARCHAR, radiation VARCHAR, recurrence VARCHAR, recurrence_location VARCHAR, date_of_recurrence DATE, date_of_last_known_alive DATE, survival_status VARCHAR, date_of_death DATE, time_to_death_days BIGINT, ct_date DATE, days_between_ct_and_surgery BIGINT, pet_date DATE);")
                         elif table == "studies":
-                            conn.execute(f"CREATE TABLE {table_name} (patient_id VARCHAR, study_instance_uid VARCHAR, study_date DATE, study_description VARCHAR);")
+                            conn.execute(f"CREATE TABLE IF NOT EXISTS {table_name} (patient_id VARCHAR, study_instance_uid VARCHAR, study_date DATE, study_description VARCHAR);")
                         elif table == "series":
-                            conn.execute(f"CREATE TABLE {table_name} (patient_id VARCHAR, study_instance_uid VARCHAR, series_instance_uid VARCHAR, series_number BIGINT, modality VARCHAR, body_part_examined VARCHAR, series_description VARCHAR);")
+                            conn.execute(f"CREATE TABLE IF NOT EXISTS {table_name} (patient_id VARCHAR, study_instance_uid VARCHAR, series_instance_uid VARCHAR, series_number BIGINT, modality VARCHAR, body_part_examined VARCHAR, series_description VARCHAR);")
 
     def teardown_after_execution(self, context: InitResourceContext) -> None:
-        self.write_collection_parquets()
-
         with self._db.get_connection() as conn:
-            for collection_name in self.collection_names:
-                for table in collection_table_names:
-                    table_name = f"{collection_name}_{table}"
-                    conn.execute(f"DROP TABLE {table_name}")
-
             conn.execute("VACUUM")
 
     def write_collection_parquets(self):

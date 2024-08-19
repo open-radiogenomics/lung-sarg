@@ -14,6 +14,7 @@ from .resources import (
     CollectionTables,
     IDCNSCLCRadiogenomicSampler
 )
+from .sensors import staged_study_sensor, injest_and_analyze_study_job
 
 # dbt = DbtCliResource(project_dir=DBT_PROJECT_DIR, profiles_dir=DBT_PROJECT_DIR)
 duckdb_resource = DuckDBResource(database=DATABASE_PATH)
@@ -25,9 +26,9 @@ all_assets = load_assets_from_modules([idc, huggingface, injested_study])
 stage_idc_nsclc_radiogenomic_samples_job = define_asset_job(
     "stage_idc_nsclc_radiogenomic_samples",
     [idc.idc_nsclc_radiogenomic_samples, idc.staged_idc_nsclc_radiogenomic_samples],
-    description="Stages IDC NSCLC Radiogenomic Samples",
+    description="Stages IDC NSCLC Radiogenomic samples",
 )
-jobs = [stage_idc_nsclc_radiogenomic_samples_job,]
+jobs = [stage_idc_nsclc_radiogenomic_samples_job, injest_and_analyze_study_job]
 
 resources = {
     # "dbt": dbt,
@@ -38,4 +39,6 @@ resources = {
     "collection_tables": CollectionTables(duckdb=duckdb_resource),
 }
 
-defs = Definitions(assets=[*dbt_assets, *all_assets], resources=resources, jobs=jobs)
+sensors = [staged_study_sensor]
+
+defs = Definitions(assets=[*dbt_assets, *all_assets], resources=resources, jobs=jobs, sensors=sensors)

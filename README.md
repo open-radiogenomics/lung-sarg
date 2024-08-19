@@ -45,7 +45,7 @@ Lung-SARG is a fully open-source and local-first platform that improves how comm
 
 *Lung SARG dataflow.*
 
-## ⚙️ Setup
+## ⚙️ Setup and execution
 
 ### 🐍 Pixi
 
@@ -67,6 +67,15 @@ Start and access the [Dagster UI](http://127.0.0.1:3000) locally.
 pixi run dev
 ```
 
+### 🧬 Run on sample data
+
+In the Dagster UI, click
+
+ > *Overview* -> *Jobs* -> *stage_idc_nsclc_radiogenomic_samples* -> *Materialize all*
+
+![Materialize staging of samples](./docs/figures/lung-sarg-stage.png)
+
+Observe what happens in the *Overview*, *Runs*, and *Assets* pages of the Dagster UI, and the content in the *lung-sarg/data* directory.
 
 
 ## 🎯 Motivation
