@@ -10,7 +10,7 @@ from .assets import huggingface, idc, injested_study
 from .resources import (
     DBT_PROJECT_DIR,
     DATABASE_PATH,
-    DatasetPublisher,
+    CollectionPublisher,
     CollectionTables,
     IDCNSCLCRadiogenomicSampler
 )
@@ -33,7 +33,7 @@ resources = {
     # "dbt": dbt,
     "io_manager": DuckDBPolarsIOManager(database=DATABASE_PATH, schema="main"),
     "idc_nsclc_radiogenomic_sampler": IDCNSCLCRadiogenomicSampler(n_samples=2),
-    "dp": DatasetPublisher(hf_token=EnvVar("HUGGINGFACE_TOKEN")),
+    "collection_publisher": CollectionPublisher(hf_token=EnvVar("HUGGINGFACE_TOKEN"), tmp_dir=str("/home/matt/data/hf")),
     "duckdb": duckdb_resource,
     "collection_tables": CollectionTables(duckdb=duckdb_resource),
 }

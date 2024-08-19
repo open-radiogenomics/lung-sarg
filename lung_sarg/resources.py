@@ -5,6 +5,7 @@ import tempfile
 from typing import Optional, List
 from pathlib import Path
 import subprocess
+import shutil
 
 import yaml
 import httpx
@@ -133,8 +134,9 @@ class IDCNSCLCRadiogenomicSampler(ConfigurableResource):
 
         return samples
 
-class DatasetPublisher(ConfigurableResource):
+class CollectionPublisher(ConfigurableResource):
     hf_token: str
+    tmp_dir: str = tempfile.gettempdir()
 
     _api: HfApi = PrivateAttr()
 
@@ -143,19 +145,14 @@ class DatasetPublisher(ConfigurableResource):
 
     def publish(
         self,
-        dataset: pl.DataFrame,
-        dataset_name: str,
+        collection_name: str,
         readme: Optional[str] = None,
         generate_datapackage: bool = False,
     ):
-        with tempfile.TemporaryDirectory() as temp_dir:
-            # Define the file path
-            data_dir = os.path.join(temp_dir, "data")
-            os.makedirs(data_dir, exist_ok=True)
-            file_path = os.path.join(data_dir, f"{dataset_name}.parquet")
-
-            # Write the dataset to a parquet file
-            dataset.write_parquet(file_path)
+        with tempfile.TemporaryDirectory(dir=self.tmp_dir) as temp_dir:
+            collection_path = COLLECTIONS_DIR / collection_name
+            log.info(f"Copying collection {collection_name} to {temp_dir}")
+            shutil.copytree(collection_path, temp_dir, dirs_exist_ok=True)
 
             if readme:
                 readme_path = os.path.join(temp_dir, "README.md")
@@ -164,19 +161,21 @@ class DatasetPublisher(ConfigurableResource):
 
             if generate_datapackage:
                 datapackage = {
-                    "name": dataset_name,
+                    "name": collection_name,
                     "resources": [
-                        {"path": f"data/{dataset_name}.parquet", "format": "parquet"}
+                        {"path": "patients.parquet", "format": "parquet"},
+                        {"path": "studies.parquet", "format": "parquet"},
+                        {"path": "series.parquet", "format": "parquet"},
                     ],
                 }
                 datapackage_path = os.path.join(temp_dir, "datapackage.yaml")
                 with open(datapackage_path, "w") as dp_file:
                     yaml.dump(datapackage, dp_file)
 
-            # Upload the entire folder to Hugging Face
+            log.info(f"Uploading collection {collection_name} to Hugging Face")
             self._api.upload_folder(
                 folder_path=temp_dir,
-                repo_id="datonic/" + dataset_name,
+                repo_id=f"radiogenomics/lung_sarg_{collection_name}",
                 repo_type="dataset",
-                commit_message=f"Update {dataset_name}",
+                commit_message=f"Update {collection_name} collection",
             )
