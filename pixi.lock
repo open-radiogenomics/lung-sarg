@@ -2781,7 +2781,7 @@ packages:
   name: lung-sarg
   version: 1.0.0
   path: .
-  sha256: b36873bf951da9d9b272586fd12c64a422e3ac7a3958a10ec6992d2fcc0ed754
+  sha256: 6c4459849de5a17fccba6b7e5f4e2f55f096207b0755e7d459ac6183bc739e58
   requires_dist:
   - dagster-dbt==0.23.16
   - dagster-duckdb-polars==0.23.16

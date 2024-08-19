@@ -15,10 +15,6 @@ jobs:
   run:
     name: Run
     runs-on: ubuntu-latest
-    env:
-      IUCN_REDLIST_TOKEN: ${{ secrets.IUCNREDLIST_TOKEN }}
-      HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
-      AEMET_API_TOKEN: ${{ secrets.AEMET_API_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,6 +27,6 @@ jobs:
         with:
           pixi-version: v0.27.1
           cache: true
-      - name: Run
+      - name: Test staging of sample data
         run: |
-          pixi run run
+          pixi run stage-samples
