@@ -16,7 +16,7 @@ from slugify import slugify
 import ngff_zarr
 import itk
 
-from ..resources import STAGED_DIR, COLLECTIONS_DIR, CollectionTables
+from ..resources import STAGED_DIR, INJESTED_DIR, COLLECTIONS_DIR, CollectionTables
 
 log = get_dagster_logger()
 
@@ -26,6 +26,9 @@ class StagedStudyConfig(Config):
     uploader: str
     study_id: str
     patient_id: str
+
+def config_to_dataframe(config: StagedStudyConfig) -> pd.DataFrame:
+    return pl.from_pandas(pd.DataFrame([config]))
 
 def clean_column_name(name: str) -> str:
     return slugify(name.replace('%', 'percent'), separator='_')
@@ -40,7 +43,7 @@ def convert_date_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 @asset()
-def injested_study(config: StagedStudyConfig, collection_tables: CollectionTables) -> None:
+def injested_study(config: StagedStudyConfig, collection_tables: CollectionTables) -> pl.DataFrame:
     """
     Injested study data.
     """
@@ -87,6 +90,13 @@ def injested_study(config: StagedStudyConfig, collection_tables: CollectionTable
             collection_ome_zarr_path = collection_path / 'ome-zarr' / config.study_id / series_id
             os.makedirs(collection_ome_zarr_path, exist_ok=True)
             ngff_zarr.to_ngff_zarr(collection_ome_zarr_path  / 'image.ome.zarr', multiscales)
+
+    staged_study_path = STAGED_DIR / config.collection_name / config.uploader / config.patient_id / config.study_id
+    injested_patient_path = INJESTED_DIR / config.collection_name / config.uploader / config.patient_id
+    os.makedirs(injested_patient_path, exist_ok=True)
+    shutil.move(staged_study_path, injested_patient_path)
+
+    return config_to_dataframe(config)
 
 @asset()
 def collection_parquets(collection_tables: CollectionTables) -> None:

@@ -24,6 +24,7 @@ DBT_PROJECT_DIR = str(Path(__file__).parent.resolve() / ".." / "dbt")
 DATA_DIR = Path(__file__).parent.resolve() / ".." / "data"
 PRE_STAGED_DIR = DATA_DIR / "pre-staged"
 STAGED_DIR = DATA_DIR / "staged"
+INJESTED_DIR = DATA_DIR / "injested"
 COLLECTIONS_DIR = DATA_DIR / "collections"
 DATABASE_PATH = os.getenv("DATABASE_PATH", str(DATA_DIR / "database.duckdb"))
 
@@ -173,6 +174,7 @@ class CollectionPublisher(ConfigurableResource):
                     yaml.dump(datapackage, dp_file)
 
             log.info(f"Uploading collection {collection_name} to Hugging Face")
+            # Note: the repository has to be already created
             self._api.upload_folder(
                 folder_path=temp_dir,
                 repo_id=f"radiogenomics/lung_sarg_{collection_name}",
