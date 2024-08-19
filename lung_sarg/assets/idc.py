@@ -9,7 +9,7 @@ from dagster import asset, get_dagster_logger
 
 import itk
 
-from ..resources import IDCNSCLCRadiogenomicSampler, PRE_STAGED_DIR, STAGED_DIR, NSCLC_RADIOMICS_COLLECTION_NAME
+from ..resources import IDCNSCLCRadiogenomicSampler, PRE_STAGED_DIR, STAGED_DIR, NSCLC_RADIOGENOMICS_COLLECTION_NAME
 
 log = get_dagster_logger()
 
@@ -29,7 +29,7 @@ def staged_idc_nsclc_radiogenomic_samples(idc_nsclc_radiogenomic_samples) -> Non
 
     for row in idc_nsclc_radiogenomic_samples.iter_rows(named=True):
         patient_id = row['Patient ID']
-        patient_pre_staged_path = PRE_STAGED_DIR / NSCLC_RADIOMICS_COLLECTION_NAME / patient_id
+        patient_pre_staged_path = PRE_STAGED_DIR / NSCLC_RADIOGENOMICS_COLLECTION_NAME / patient_id
 
         image_series_path = patient_pre_staged_path / 'image-series.json'
         image_series = pd.read_json(image_series_path)
@@ -45,7 +45,7 @@ def staged_idc_nsclc_radiogenomic_samples(idc_nsclc_radiogenomic_samples) -> Non
             series_table.astype({'Patient ID': 'string', 'Study Instance UID': 'string', 'Series Instance UID': 'string', 'Series Number': 'int32', 'Modality': 'string', 'Body Part Examined': 'string', 'Series Description': 'string'})
 
             for series_id, ds in series.iterrows():
-                patient_staged_path = STAGED_DIR / NSCLC_RADIOMICS_COLLECTION_NAME / "dagster" / patient_id / ds.StudyInstanceUID
+                patient_staged_path = STAGED_DIR / NSCLC_RADIOGENOMICS_COLLECTION_NAME / "dagster" / patient_id / ds.StudyInstanceUID
                 os.makedirs(patient_staged_path, exist_ok=True)
 
                 dicom_path = patient_pre_staged_path / 'dicom' / ds.PatientID / ds.StudyInstanceUID / ds.SeriesInstanceUID

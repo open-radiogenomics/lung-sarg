@@ -4,35 +4,6 @@ import httpx
 import polars as pl
 from dagster import AssetExecutionContext, Backoff, RetryPolicy, asset
 
-from ..resources import IUCNRedListAPI
-
-
-@asset(
-    retry_policy=RetryPolicy(max_retries=5, delay=2, backoff=Backoff.EXPONENTIAL),
-)
-def threatened_animal_species(
-    context: AssetExecutionContext, iucn_redlist_api: IUCNRedListAPI
-) -> pl.DataFrame:
-    """
-    Threatened animal species data from the IUCN Red List API.
-    """
-    page = 1
-    all_results = []
-
-    while True:
-        context.log.info(f"Fetching page {page}...")
-        results = iucn_redlist_api.get_species(page)
-
-        context.log.info(f"Got {len(results)} results.")
-
-        if results == []:
-            break
-        all_results.extend(results)
-        page += 1
-
-    return pl.DataFrame(all_results, infer_schema_length=None)
-
-
 @asset(
     retry_policy=RetryPolicy(max_retries=5, delay=2, backoff=Backoff.EXPONENTIAL),
 )

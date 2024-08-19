@@ -6,8 +6,6 @@ import polars as pl
 from dagster import Backoff, RetryPolicy, AssetExecutionContext, asset
 from slugify import slugify
 
-from ..resources import AEMETAPI, MITECOArcGisAPI
-
 
 @asset(
     retry_policy=RetryPolicy(max_retries=3, delay=10, backoff=Backoff.EXPONENTIAL),
@@ -92,113 +90,5 @@ def spain_ipc() -> pl.DataFrame:
     df = df.select(
         [pl.col(col).alias(slugify(col, separator="_")) for col in df.columns]
     )
-
-    return df
-
-
-@asset()
-def spain_aemet_stations_data(aemet_api: AEMETAPI) -> pl.DataFrame:
-    """
-    Spain AEMET stations data.
-    """
-
-    df = pl.DataFrame(aemet_api.get_all_stations())
-    df.with_columns(pl.col("indsinop").cast(pl.Int32, strict=False).alias("indsinop"))
-
-    # Clean latitud and longitud
-    def convert_to_decimal(coord):
-        degrees = int(coord[:-1][:2])
-        minutes = int(coord[:-1][2:4])
-        seconds = int(coord[:-1][4:])
-        decimal = degrees + minutes / 60 + seconds / 3600
-        if coord[-1] in ["S", "W"]:
-            decimal = -decimal
-        return decimal
-
-    df = df.with_columns(
-        [
-            pl.col("latitud").map_elements(convert_to_decimal).alias("latitud"),
-            pl.col("longitud").map_elements(convert_to_decimal).alias("longitud"),
-        ]
-    )
-
-    return df
-
-
-@asset()
-def spain_aemet_weather_data(
-    context: AssetExecutionContext, aemet_api: AEMETAPI
-) -> pl.DataFrame:
-    """
-    Spain weather data since 1940.
-    """
-
-    start_date = datetime(1940, 1, 1)
-    end_date = datetime.now()
-
-    r = aemet_api.get_weather_data(start_date, end_date)
-
-    df = pl.DataFrame()
-    for d in r:
-        ndf = pl.DataFrame(d)
-        df = pl.concat([df, ndf], how="diagonal_relaxed")
-
-    df = df.with_columns(pl.col("fecha").str.strptime(pl.Date, format="%Y-%m-%d"))
-
-    float_columns = [
-        "prec",
-        "presMax",
-        "presMin",
-        "racha",
-        "sol",
-        "tmax",
-        "tmed",
-        "tmin",
-        "velmedia",
-    ]
-
-    df = df.with_columns(
-        [
-            pl.col(col).str.replace(",", ".").cast(pl.Float64, strict=False)
-            for col in float_columns
-        ]
-    )
-
-    return df
-
-
-@asset()
-def spain_water_reservoirs_data(
-    context: AssetExecutionContext, miteco_api: MITECOArcGisAPI
-) -> pl.DataFrame:
-    """
-    Spain water reservoirs data since 1988.
-
-    Data obtained from the ArcGIS server hosted by MITECO (Ministerio para la Transición Ecológica
-     y el Reto Demográfico).
-
-    The data are also available on this website:
-     https://www.miteco.gob.es/es/agua/temas/evaluacion-de-los-recursos-hidricos/boletin-hidrologico.html
-    """
-    start_year = 1988
-    current_year = datetime.now().year
-
-    df = pl.DataFrame()
-
-    for year in range(start_year, current_year + 1):
-        start_date = datetime(year, 1, 1)
-        end_date = datetime(year, 12, 31)
-        context.log.info(
-            f"Getting data from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}"
-        )
-        response = miteco_api.get_water_reservoirs_data(start_date, end_date)
-        if response["features"]:
-            mdf = pl.from_records(
-                [elem["attributes"] for elem in response["features"]],
-                infer_schema_length=None,
-            )
-            df = pl.concat([df, mdf], how="diagonal_relaxed")
-
-    df = df.with_columns(pl.col("fecha").cast(pl.Datetime("ms")))
 
     return df

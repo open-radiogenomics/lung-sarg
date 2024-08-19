@@ -8,30 +8,6 @@ from slugify import slugify
 
 
 @asset()
-def owid_energy_data() -> pl.DataFrame:
-    """
-    Raw Energy data from Our World in Data.
-    """
-    energy_owid_url = (
-        "https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv"
-    )
-
-    return pl.read_csv(energy_owid_url)
-
-
-@asset()
-def owid_co2_data() -> pl.DataFrame:
-    """
-    Raw CO2 data from Our World in Data.
-    """
-    co2_owid_url = (
-        "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv"
-    )
-
-    return pl.read_csv(co2_owid_url)
-
-
-@asset()
 def world_bank_wdi() -> pl.DataFrame:
     """
     World Development Indicators (WDI) is the World Bank's premier compilation of cross-country comparable data on development.
