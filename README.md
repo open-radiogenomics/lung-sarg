@@ -2,13 +2,13 @@
 
 <p align="center">
   <h1 style="font-size:80px; font-weight: 800;" align="center">L U N G - S A R G</h1>
-  <p align="center">The Open Data Platform for Sustainable, Assessible Lung Radiogenomics</a> </p>
+  <p align="center">The Open Data Platform for Sustainable, Accessible Lung Radiogenomics</a> </p>
 </p>
 
 <div align="center">
-  <img alt="GitHub" src="https://img.shields.io/github/license/radiogenomics/lung-sarg?style=flat-square">
-  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/radiogenomics/lung-sarg/ci.yml?style=flat-square">
-  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/radiogenomics/lung-sarg?style=flat-square">
+  <img alt="GitHub" src="https://img.shields.io/github/license/open-radiogenomics/lung-sarg?style=flat-square">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/open-radiogenomics/lung-sarg/ci.yml?style=flat-square">
+  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/open-radiogenomics/lung-sarg?style=flat-square">
 </div>
 
 <br>

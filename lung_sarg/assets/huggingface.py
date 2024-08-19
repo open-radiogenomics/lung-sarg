@@ -16,7 +16,7 @@ license: mit
 ---
 # Lung-SARG {collection_name} collection
 
-[Lung-SARG](https://github.com/radiogenomics/lung-sarg) is a fully open-source and local-first platform
+[Lung-SARG](https://github.com/open-radiogenomics/lung-sarg) is a fully open-source and local-first platform
 that improves how communities collaborate on open data to diagnose lung cancer and perform epidemiology
 on local populations in low and middle income countries.
 

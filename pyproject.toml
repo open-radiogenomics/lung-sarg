@@ -26,9 +26,9 @@ license = { text = "MIT" }
 
 [project.urls]
 Homepage = "https://radiogenomics.github.io/lung-sarg/"
-Changelog = "https://github.com/radiogenomics/lung-sarg/commits/main/"
-Issues = "https://github.com/radiogenomics/lung-sarg/issues"
-CI = "https://github.com/radiogenomics/lung-sarg/actions"
+Changelog = "https://github.com/open-radiogenomics/lung-sarg/commits/main/"
+Issues = "https://github.com/open-radiogenomics/lung-sarg/issues"
+CI = "https://github.com/open-radiogenomics/lung-sarg/actions"
 
 [project.optional-dependencies]
 dev = ["dagster-webserver==1.7.16", "ruff"]
