@@ -17,7 +17,7 @@ dependencies = [
     "python-slugify",
     "tenacity",
     "itk>=5.4.0,<6",
-    "ngff-zarr[itk,dask-image]>=0.8.5,<0.9",
+    "ngff-zarr[itk,dask-image]>=0.8.5,<0.9", "s5cmd>=0.2.0,<0.3",
 ]
 
 requires-python = ">=3.11, <=3.13"
@@ -68,15 +68,3 @@ clean = { cmd = "rm -rf data/*.parquet data/*.duckdb dbt/target dbt/dbt_packages
 
 [tool.pixi.feature.dev.tasks]
 dev = { cmd = "dagster dev", description = "Run the development environment" }
-
-[tool.pixi.target.win-64.dependencies]
-s5cmd = ">=2.2.2,<3"
-
-[tool.pixi.target.linux-64.dependencies]
-s5cmd = ">=2.2.2,<3"
-
-[tool.pixi.target.osx-64.dependencies]
-s5cmd = ">=2.2.2,<3"
-
-[tool.pixi.target.osx-arm64.dependencies]
-s3cmd = ">=2.0.2,<3"

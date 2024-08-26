@@ -6,8 +6,6 @@ from typing import Optional, List
 from pathlib import Path
 import subprocess
 import shutil
-import platform
-import sys
 
 import yaml
 import httpx
@@ -119,13 +117,7 @@ class IDCNSCLCRadiogenomicSampler(ConfigurableResource):
                 dicom_path = images_path / ds.PatientID / ds.StudyInstanceUID / ds.SeriesInstanceUID
                 os.makedirs(dicom_path, exist_ok=True)
 
-                if sys.platform.startswith('darwin') and platform.processor() == 'arm':
-                    s3cmd = "s3cmd"
-                else:
-                    # faster
-                    s3cmd = "s5cmd"
-
-                command = [s3cmd,
+                command = ["s5cmd",
                     "--no-sign-request",
                     "--endpoint-url",
                     "https://s3.amazonaws.com",
