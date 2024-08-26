@@ -4037,7 +4037,7 @@ packages:
   name: lung-sarg
   version: 1.0.0
   path: .
-  sha256: f9aae54bc057dbcdd833df0603d2bd7d5c2459e43e9cf142ff9c45803b352126
+  sha256: 963ec3c9a3557a0ab845f2942dc3ef6d050028532213d272a37a1f97bf6282c5
   requires_dist:
   - dagster-dbt==0.23.16
   - dagster-duckdb-polars==0.23.16
@@ -4054,6 +4054,7 @@ packages:
   - tenacity
   - itk>=5.4.0,<6
   - ngff-zarr[itk,dask-image]>=0.8.5,<0.9
+  - s5cmd>=0.2.0,<0.3
   - dagster-webserver==1.7.16 ; extra == 'dev'
   - ruff ; extra == 'dev'
   requires_python: '>=3.11,<=3.13'
