@@ -145,8 +145,10 @@ class CollectionPublisher(ConfigurableResource):
     ):
         with tempfile.TemporaryDirectory(dir=self.tmp_dir) as temp_dir:
             collection_path = COLLECTIONS_DIR / collection_name
-            log.info(f"Copying collection {collection_name} to {temp_dir}")
-            shutil.copytree(collection_path, temp_dir, dirs_exist_ok=True)
+            log.info(f"Copying collection {collection_name} parquet files to {temp_dir}")
+            shutil.copyfile(collection_path / "patients.parquet", os.path.join(temp_dir, "patients.parquet"))
+            shutil.copyfile(collection_path / "studies.parquet", os.path.join(temp_dir, "studies.parquet"))
+            shutil.copyfile(collection_path / "series.parquet", os.path.join(temp_dir, "series.parquet"))
 
             if readme:
                 readme_path = os.path.join(temp_dir, "README.md")
@@ -173,4 +175,6 @@ class CollectionPublisher(ConfigurableResource):
                 repo_id=f"radiogenomics/lung_sarg_{collection_name}",
                 repo_type="dataset",
                 commit_message=f"Update {collection_name} collection",
+                multi_commits=True,
+                multi_commits_verbose=True,
             )
