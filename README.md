@@ -77,6 +77,33 @@ In the Dagster UI, click
 
 Observe what happens in the *Overview*, *Runs*, and *Assets* pages of the Dagster UI, and the content in the *lung-sarg/data* directory.
 
+## 💗 Contribute new analysis methods
+
+If you are not familiar with Dagster, go through the [Dagster Tutorial](https://docs.dagster.io/tutorial).
+
+1. Add a new *asset* module for the analysis at [*lung_sarg/assets/*](./lung_sarg/assets/). The asset should have a signature like:
+
+```python
+from dagster import asset
+
+from .injested_study import injested_study
+from ..resources import COLLECTIONS_DIR, CollectionsTable
+
+@asset
+def an_analysis_output_name(injested_study, collection_tables: CollectionTables) -> None:
+  # Populate:
+  #
+  # COLLECTIONS_DIR / injested_study.collection_name.iloc[0] / injested_study.patient_id.iloc[0]
+  #
+  # with nifti and ome-zarr images.
+  #
+  # Update collections_tables f"{collection_name}_patients", with any biomarkers and f"{collection_name}_studies", and f"{collection_name}_series" with the metadata for any produced images.
+```
+
+2. Register the analysis asset in [*lung_sarg/__init__.py*](./lung_sarg/__init__.py).
+
+3. Add the analysis asset to the `injest_and_analyze_study_job` in [*lung_sarg/sensors.py*](./lung_sarg/sensors.py)
+
 
 ## 🎯 Motivation
 
